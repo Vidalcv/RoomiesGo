@@ -114,7 +114,7 @@ fun CreateAccountScreen(navController: NavController) { // <-- Añade NavControl
                         onClick = {
                             // Aquí iría tu lógica de creación de cuenta real (ej. llamar a ViewModel)
                             // Si la creación es exitosa:
-                            navController.navigate("home_screen") {
+                            navController.navigate("login_screen") {
                                 // Limpia la pila de navegación hasta welcome_screen (inclusive)
                                 // para que no se pueda volver atrás a las pantallas de registro/login.
                                 popUpTo("welcome_screen") { inclusive = true }
