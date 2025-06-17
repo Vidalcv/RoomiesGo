@@ -2,6 +2,7 @@ package com.example.roomiesgo.View
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,11 @@ import androidx.compose.ui.unit.sp
 @Preview
 @Composable
 fun WelcomeScreen() {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,6 +50,7 @@ fun WelcomeScreen() {
 
         Spacer(modifier = Modifier.height(35.dp))  // <-- Espacio inmediatamente después de la imagen
 
+        Spacer(modifier = Modifier.height(15.dp))  // <-- Segundo espacio, justo antes del botón
         Spacer(modifier = Modifier.height(20.dp))  // <-- Segundo espacio, justo antes del botón
 
         Button(
