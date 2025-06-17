@@ -1,6 +1,7 @@
 package com.example.roomiesgo.View
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -14,11 +15,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController // Importa NavController
+import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
 
-@Preview
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) { // <-- Añade NavController como parámetro
 
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -36,7 +38,11 @@ fun LoginScreen() {
         ) {
             // Botón de retroceso
             IconButton(
-                onClick = { /* Acción de volver */ },
+                onClick = {
+                    // Acción para regresar a WelcomeScreen
+                    navController.popBackStack("welcome_screen", inclusive = false)
+                    // Opcional: navController.popBackStack() si quieres ir a la pantalla anterior sin especificar.
+                },
                 modifier = Modifier
                     .size(40.dp)
             ) {
@@ -94,7 +100,15 @@ fun LoginScreen() {
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Button(
-                        onClick = { /* Acción login */ },
+                        onClick = {
+                            // Aquí iría tu lógica de autenticación real
+                            // Si el inicio de sesión es exitoso:
+                            navController.navigate("home_screen") {
+                                // Limpia la pila de navegación hasta welcome_screen (inclusive)
+                                // para que no se pueda volver atrás a las pantallas de registro/login.
+                                popUpTo("welcome_screen") { inclusive = true }
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF159E91)),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -111,9 +125,17 @@ fun LoginScreen() {
                         fontSize = 13.sp,
                         color = Color.Gray,
                         modifier = Modifier.align(Alignment.Start)
+                            .clickable { navController.navigate("password_screen") }
                     )
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    // Para el Preview, necesitas proporcionar una instancia de NavController simulada.
+    LoginScreen(navController = rememberNavController())
 }

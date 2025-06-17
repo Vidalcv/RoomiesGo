@@ -15,22 +15,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import androidx.navigation.NavController // Importa NavController
+import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
 
 @Composable
-fun SplashScreen(navToLogin: () -> Unit) {
+fun AnimatedSplashScreen(navController: NavController) { // <-- Ahora recibe NavController
 
     // Animación de escala y opacidad
     val scale by animateFloatAsState(
@@ -47,7 +47,10 @@ fun SplashScreen(navToLogin: () -> Unit) {
     // Navegar luego de 3.5 segundos
     LaunchedEffect(Unit) {
         delay(3500)
-        navToLogin()
+        // Navega a la WelcomeScreen y elimina el splash de la pila
+        navController.navigate("welcome_screen") {
+            popUpTo("animated_splash_screen") { inclusive = true } // Elimina el splash de la pila
+        }
     }
 
     // Fondo degradado
@@ -62,7 +65,7 @@ fun SplashScreen(navToLogin: () -> Unit) {
         ) {
             // Logo con animación
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.logop),
                 contentDescription = "Logo",
                 modifier = Modifier
                     .size(140.dp)
@@ -84,16 +87,9 @@ fun SplashScreen(navToLogin: () -> Unit) {
         }
     }
 }
+
+@Preview(showBackground = true)
 @Composable
-fun AppMainContent() {
-    var mostrarSplash by remember { mutableStateOf(true) }
-
-    if (mostrarSplash) {
-        SplashScreen(navToLogin = {
-            mostrarSplash = false // Cuando termine, muestra Login
-        })
-    } else {
-        WelcomeScreen() // ← Aquí va tu pantalla de Login
-    }
+fun AnimatedSplashScreenPreview() {
+    AnimatedSplashScreen(navController = rememberNavController()) // Para el Preview
 }
-

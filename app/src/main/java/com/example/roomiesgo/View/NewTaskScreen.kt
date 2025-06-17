@@ -18,12 +18,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController // Importa NavController
+import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
 import java.util.*
 
-@Preview
 @Composable
-fun NewTaskScreen() {
+fun NewTaskScreen(navController: NavController) { // <-- Añade NavController como parámetro
     val context = LocalContext.current
 
     var title by remember { mutableStateOf("") }
@@ -40,13 +41,16 @@ fun NewTaskScreen() {
     ) {
         // Icono de volver
         IconButton(
-            onClick = { /* Acción de volver */ },
+            onClick = {
+                // Acción para volver a la pantalla anterior (HomeScreen o TaskScreen)
+                navController.popBackStack()
+            },
             modifier = Modifier
                 .size(40.dp)
                 .align(Alignment.Start)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.flecha_izquierda),
+                painter = painterResource(id = R.drawable.flecha_izquierda), // Asumiendo que tienes este recurso
                 contentDescription = "Volver",
                 modifier = Modifier.size(32.dp)
             )
@@ -131,11 +135,21 @@ fun NewTaskScreen() {
         Spacer(modifier = Modifier.height(12.dp))
 
         Button(
-            onClick = { /* guardar */ },
+            onClick = {
+
+                navController.popBackStack() // <-- Vuelve a la pantalla anterior (HomeScreen o TaskScreen)
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688))
         ) {
             Text("Guardar")
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NewTaskScreenPreview() {
+    // Para el Preview, proporciona un NavController simulado
+    NewTaskScreen(navController = rememberNavController())
 }

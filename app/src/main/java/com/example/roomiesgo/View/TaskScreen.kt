@@ -18,11 +18,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController // Importa NavController
+import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
 
-@Preview
 @Composable
-fun TaskScreen() {
+fun TaskScreen(navController: NavController) { // <-- Añade NavController como parámetro
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -42,13 +43,27 @@ fun TaskScreen() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                // Si esta pantalla es secundaria y se accede desde HomeScreen
+                // podríamos añadir un IconButton para volver aquí.
+                // Por ejemplo:
+                IconButton(
+                    onClick = { navController.popBackStack() }, // Volver a la pantalla anterior
+                    modifier = Modifier.size(40.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.flecha_izquierda), // Asumiendo que tienes esta flecha
+                        contentDescription = "Volver",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
                 Image(
                     painter = painterResource(id = R.drawable.logop),
                     contentDescription = "Logo",
                     modifier = Modifier.size(65.dp)
                 )
                 Text(
-                    text = "Mi hogar",
+                    text = "Tareas", // He cambiado el título de "Mi hogar" a "Tareas" para reflejar el contenido
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -67,7 +82,7 @@ fun TaskScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Lista de tareas
+            // Lista de tareas (este es el contenido principal de la pantalla)
             repeat(6) {
                 Surface(
                     modifier = Modifier
@@ -117,9 +132,13 @@ fun TaskScreen() {
             }
         }
 
-        // Botón flotante
+        // Botón flotante para agregar una NUEVA tarea
         FloatingActionButton(
-            onClick = { /* Acción agregar */ },
+            onClick = {
+                // Navega a una pantalla dedicada para crear una nueva tarea.
+                // Asumiremos que esta se llamará "create_new_task_screen".
+                navController.navigate("new_task_screen")
+            },
             containerColor = Color(0xFF009688),
             shape = RoundedCornerShape(50),
             modifier = Modifier
@@ -129,4 +148,10 @@ fun TaskScreen() {
             Icon(Icons.Default.Add, contentDescription = "Agregar")
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TaskScreenPreview() {
+    TaskScreen(navController = rememberNavController())
 }

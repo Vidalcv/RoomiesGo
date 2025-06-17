@@ -15,11 +15,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController // Importa NavController
+import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
 
-@Preview
 @Composable
-fun HistorialUI() {
+fun HistoryScreen(navController: NavController) { // <-- Añade NavController
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -37,25 +38,26 @@ fun HistorialUI() {
             ) {
                 // Icono volver a la izquierda
                 IconButton(
-                    onClick = { /* acción volver */ },
+                    onClick = { navController.popBackStack() }, // Vuelve a la pantalla anterior (HomeScreen)
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flecha_izquierda),
+                        painter = painterResource(id = R.drawable.flecha_izquierda), // Asegúrate de tener este recurso
                         contentDescription = "Volver",
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(48.dp))
+                // Spacer(modifier = Modifier.width(48.dp)) // Este Spacer puede causar problemas de alineación con el Box, lo comento.
 
-                // Row con logo a la izquierda y título centrado
+                // Row con logo a la izquierda y título centrado (ajustado para funcionar con IconButton)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center // Centra el contenido de este Row
                 ) {
+                    // Puedes ajustar el tamaño del logo si es necesario para el centrado visual
                     Image(
                         painter = painterResource(id = R.drawable.logop),
                         contentDescription = "Logo",
@@ -110,7 +112,12 @@ fun HistorialUI() {
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {},
+                onClick = {
+                    // Aquí iría la lógica para eliminar el historial.
+                    // Podrías mostrar un Diálogo de confirmación antes de eliminar.
+                    // Después de la acción, no hay navegación automática, se queda en la misma pantalla.
+                    // Opcional: mostrar un Toast/Snackbar de éxito.
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935))
             ) {
@@ -118,4 +125,10 @@ fun HistorialUI() {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HistorialUIPreview() {
+    HistoryScreen(navController = rememberNavController()) // Para el Preview
 }

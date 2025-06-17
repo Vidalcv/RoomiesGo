@@ -27,14 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-@Preview
-@Composable
-fun WelcomeScreen() {
+// Importa NavController y rememberNavController para el Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
+@Composable
+fun WelcomeScreen(navController: NavController) { // <-- Añade NavController como parámetro
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,13 +46,16 @@ fun WelcomeScreen() {
             modifier = Modifier.size(255.dp)
         )
 
-        Spacer(modifier = Modifier.height(35.dp))  // <-- Espacio inmediatamente después de la imagen
+        Spacer(modifier = Modifier.height(35.dp))
 
-        Spacer(modifier = Modifier.height(15.dp))  // <-- Segundo espacio, justo antes del botón
-        Spacer(modifier = Modifier.height(20.dp))  // <-- Segundo espacio, justo antes del botón
+        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { /* Acción iniciar sesión */ },
+            onClick = {
+                // Acción para navegar a la pantalla de Inicio de Sesión
+                navController.navigate("login_screen")
+            },
             modifier = Modifier
                 .width(250.dp)
                 .height(50.dp),
@@ -72,7 +73,10 @@ fun WelcomeScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedButton(
-            onClick = { /* Acción crear cuenta */ },
+            onClick = {
+                // Acción para navegar a la pantalla de Crear Cuenta
+                navController.navigate("create_account_screen")
+            },
             modifier = Modifier
                 .width(250.dp)
                 .height(50.dp),
@@ -100,4 +104,11 @@ fun WelcomeScreen() {
             color = Color.Black
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WelcomeScreenPreview() {
+    // Para el Preview, proporciona un NavController simulado
+    WelcomeScreen(navController = rememberNavController())
 }
