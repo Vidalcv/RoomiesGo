@@ -26,8 +26,7 @@ fun CreateAccountScreen() {
 
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxSize()
                 .background(Color.White)
         ) {
             Column(
