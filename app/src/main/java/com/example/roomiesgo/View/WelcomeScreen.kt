@@ -35,6 +35,9 @@ fun WelcomeScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
             .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -48,6 +51,7 @@ fun WelcomeScreen() {
         Spacer(modifier = Modifier.height(35.dp))  // <-- Espacio inmediatamente después de la imagen
 
         Spacer(modifier = Modifier.height(15.dp))  // <-- Segundo espacio, justo antes del botón
+        Spacer(modifier = Modifier.height(20.dp))  // <-- Segundo espacio, justo antes del botón
 
         Button(
             onClick = { /* Acción iniciar sesión */ },
