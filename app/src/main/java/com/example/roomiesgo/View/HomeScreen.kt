@@ -19,18 +19,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+
 import com.example.roomiesgo.R
 
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) { // <-- Añade NavController como parámetro
     var menuExpanded by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(45.dp),
+            .padding(45.dp), // Este padding afecta a toda la pantalla.
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Header con logo centrado y botón de menú a la derecha
@@ -54,7 +57,7 @@ fun HomeScreen() {
                     modifier = Modifier.size(65.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("INICIO", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
             }
 
             // Botón de menú (3 puntos)
@@ -67,9 +70,27 @@ fun HomeScreen() {
                     expanded = menuExpanded,
                     onDismissRequest = { menuExpanded = false }
                 ) {
-                    DropdownMenuItem(text = { Text("Historial") }, onClick = { menuExpanded = false })
-                    DropdownMenuItem(text = { Text("Configuración") }, onClick = { menuExpanded = false })
-                    DropdownMenuItem(text = { Text("Cerrar sesión") }, onClick = { menuExpanded = false })
+                    DropdownMenuItem(
+                        text = { Text("Historial") },
+                        onClick = {
+                            menuExpanded = false
+                            navController.navigate("history_screen") // <-- Navega a HistoryScreen
+                        }
+                    )
+                    DropdownMenuItem(text = { Text("Configuración") }, onClick = {
+                        menuExpanded = false
+                        // navController.navigate("settings_screen") // <-- Si tienes una pantalla de configuración
+                    })
+                    DropdownMenuItem(
+                        text = { Text("Cerrar sesión") },
+                        onClick = {
+                            menuExpanded = false
+                            // Navega a la WelcomeScreen y elimina todas las pantallas anteriores
+                            navController.navigate("welcome_screen") {
+                                popUpTo("welcome_screen") { inclusive = true }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -137,7 +158,7 @@ fun HomeScreen() {
                     ) {
                         Text("+10 puntos", color = Color(0xFF159E91), fontWeight = FontWeight.Bold)
                         Button(
-                            onClick = { },
+                            onClick = { /* Acción para marcar tarea como hecha */ },
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8DAAF9)),
                             modifier = Modifier.height(30.dp)
                         ) {
@@ -150,13 +171,25 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.weight(1f))
 
+        // Floating Action Button para agregar tarea
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomStart) {
+            // Dentro de HomeScreen...
             FloatingActionButton(
-                onClick = { },
+                onClick = {
+                    navController.navigate("task_screen") // <-- Navega a NewTaskScreen (que es tu TaskScreen)
+                },
                 containerColor = Color(0xFF159E91)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar tarea")
             }
+
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    // Para el Preview, proporciona un NavController simulado
+    HomeScreen(navController = rememberNavController())
 }
