@@ -25,7 +25,8 @@ fun PasswordScreen() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center,

@@ -28,7 +28,8 @@ fun HomeScreen() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(45.dp),
         horizontalAlignment = Alignment.CenterHorizontally

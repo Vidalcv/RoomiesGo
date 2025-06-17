@@ -33,7 +33,8 @@ fun NewTaskScreen() {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(horizontal = 24.dp, vertical = 40.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)

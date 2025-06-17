@@ -25,7 +25,8 @@ import com.example.roomiesgo.R
 fun TaskScreen() {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {

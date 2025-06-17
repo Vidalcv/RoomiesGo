@@ -22,7 +22,8 @@ import com.example.roomiesgo.R
 fun HistorialUI() {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(24.dp)
     ) {
