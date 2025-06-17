@@ -31,8 +31,7 @@ fun HomeScreen(navController: NavController) { // <-- Añade NavController como 
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .background(Color.White)
             .padding(45.dp), // Este padding afecta a toda la pantalla.
         horizontalAlignment = Alignment.CenterHorizontally

@@ -27,8 +27,7 @@ fun LoginScreen(navController: NavController) { // <-- Añade NavController como
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
+            .fillMaxSize()
             .background(Color.White),
     ) {
         Column(

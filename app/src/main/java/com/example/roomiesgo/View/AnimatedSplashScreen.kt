@@ -46,7 +46,7 @@ fun AnimatedSplashScreen(navController: NavController) { // <-- Ahora recibe Nav
 
     // Navegar luego de 3.5 segundos
     LaunchedEffect(Unit) {
-        delay(3500)
+        delay(1500)
         // Navega a la WelcomeScreen y elimina el splash de la pila
         navController.navigate("welcome_screen") {
             popUpTo("animated_splash_screen") { inclusive = true } // Elimina el splash de la pila
