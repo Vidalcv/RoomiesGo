@@ -4,78 +4,83 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.roomiesgo.R
+import com.example.roomiesgo.ViewModel.LoginViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewModel()) {
+
+    val username = viewModel.username
+    val password = viewModel.password
+    val isLoading = viewModel.isLoading
+
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val cardColor = MaterialTheme.colorScheme.surface
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 24.dp)
+            .background(backgroundColor)
+            .systemBarsPadding()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Parte superior: Botón de retroceso
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp),
+                    .padding(top = 24.dp, start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
-                    onClick = {
-                        navController.popBackStack("welcome_screen", inclusive = false)
-                    },
+                    onClick = { navController.popBackStack("welcome_screen", false) },
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flecha_izquierda),
-                        contentDescription = "Volver"
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Volver",
+                        tint = textColor
                     )
                 }
             }
 
-            // Parte media: Título y formulario
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "INICIAR SESIÓN",
                     fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = textColor
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
+                    modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     border = CardDefaults.outlinedCardBorder(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                    colors = CardDefaults.cardColors(containerColor = cardColor)
                 ) {
                     Column(
                         modifier = Modifier
@@ -84,7 +89,7 @@ fun LoginScreen(navController: NavController) {
                     ) {
                         OutlinedTextField(
                             value = username,
-                            onValueChange = { username = it },
+                            onValueChange = viewModel::onUsernameChanged,
                             label = { Text("Usuario") },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true
@@ -94,7 +99,7 @@ fun LoginScreen(navController: NavController) {
 
                         OutlinedTextField(
                             value = password,
-                            onValueChange = { password = it },
+                            onValueChange = viewModel::onPasswordChanged,
                             label = { Text("Contraseña") },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true,
@@ -105,9 +110,16 @@ fun LoginScreen(navController: NavController) {
 
                         Button(
                             onClick = {
-                                navController.navigate("home_screen") {
-                                    popUpTo("welcome_screen") { inclusive = true }
-                                }
+                                viewModel.login(
+                                    onSuccess = {
+                                        navController.navigate("home_screen") {
+                                            popUpTo("welcome_screen") { inclusive = true }
+                                        }
+                                    },
+                                    onError = {
+                                        // Mostrar mensaje de error si se desea
+                                    }
+                                )
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -115,7 +127,15 @@ fun LoginScreen(navController: NavController) {
                             shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF159E91))
                         ) {
-                            Text("Iniciar Sesión", color = Color.White)
+                            if (isLoading) {
+                                CircularProgressIndicator(
+                                    color = Color.White,
+                                    modifier = Modifier.size(20.dp),
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                Text("Iniciar Sesión", color = Color.White)
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -132,7 +152,6 @@ fun LoginScreen(navController: NavController) {
                 }
             }
 
-            // Parte inferior: espacio de separación
             Spacer(modifier = Modifier.height(24.dp))
         }
     }

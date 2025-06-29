@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,15 +19,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController // Importa NavController
-import androidx.navigation.compose.rememberNavController // Necesario para el Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.roomiesgo.R
 
 @Composable
-fun TaskScreen(navController: NavController) { // <-- Añade NavController como parámetro
+fun TaskScreen(navController: NavController) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight()
             .background(Color.White)
             .padding(horizontal = 16.dp, vertical = 24.dp)
     ) {
@@ -43,27 +45,25 @@ fun TaskScreen(navController: NavController) { // <-- Añade NavController como 
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Si esta pantalla es secundaria y se accede desde HomeScreen
-                // podríamos añadir un IconButton para volver aquí.
-                // Por ejemplo:
+                // Botón para volver con icono por defecto ArrowBack
                 IconButton(
-                    onClick = { navController.popBackStack() }, // Volver a la pantalla anterior
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.size(40.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flecha_izquierda), // Asumiendo que tienes esta flecha
+                        imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Volver",
                         modifier = Modifier.size(24.dp)
                     )
                 }
 
                 Image(
-                    painter = painterResource(id = R.drawable.logop),
+                    painter = painterResource(id = R.drawable.logot),
                     contentDescription = "Logo",
                     modifier = Modifier.size(65.dp)
                 )
                 Text(
-                    text = "Tareas", // He cambiado el título de "Mi hogar" a "Tareas" para reflejar el contenido
+                    text = "Tareas",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -82,7 +82,7 @@ fun TaskScreen(navController: NavController) { // <-- Añade NavController como 
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Lista de tareas (este es el contenido principal de la pantalla)
+            // Lista de tareas
             repeat(6) {
                 Surface(
                     modifier = Modifier
@@ -135,8 +135,6 @@ fun TaskScreen(navController: NavController) { // <-- Añade NavController como 
         // Botón flotante para agregar una NUEVA tarea
         FloatingActionButton(
             onClick = {
-                // Navega a una pantalla dedicada para crear una nueva tarea.
-                // Asumiremos que esta se llamará "create_new_task_screen".
                 navController.navigate("new_task_screen")
             },
             containerColor = Color(0xFF009688),

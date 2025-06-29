@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,12 +17,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController // Importa NavController
-import androidx.navigation.compose.rememberNavController // Necesario para el Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.roomiesgo.R
 
 @Composable
-fun HistoryScreen(navController: NavController) { // <-- Añade NavController
+fun HistoryScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -36,30 +38,27 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
                     .fillMaxWidth()
                     .height(56.dp),
             ) {
-                // Icono volver a la izquierda
+                // Icono volver a la izquierda usando ícono por defecto
                 IconButton(
-                    onClick = { navController.popBackStack() }, // Vuelve a la pantalla anterior (HomeScreen)
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flecha_izquierda), // Asegúrate de tener este recurso
+                        imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Volver",
                         modifier = Modifier.size(32.dp)
                     )
                 }
-                // Spacer(modifier = Modifier.width(48.dp)) // Este Spacer puede causar problemas de alineación con el Box, lo comento.
 
-                // Row con logo a la izquierda y título centrado (ajustado para funcionar con IconButton)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center // Centra el contenido de este Row
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    // Puedes ajustar el tamaño del logo si es necesario para el centrado visual
                     Image(
-                        painter = painterResource(id = R.drawable.logop),
+                        painter = painterResource(id = R.drawable.logot),
                         contentDescription = "Logo",
                         modifier = Modifier.size(65.dp)
                     )
@@ -113,10 +112,7 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
 
             Button(
                 onClick = {
-                    // Aquí iría la lógica para eliminar el historial.
-                    // Podrías mostrar un Diálogo de confirmación antes de eliminar.
-                    // Después de la acción, no hay navegación automática, se queda en la misma pantalla.
-                    // Opcional: mostrar un Toast/Snackbar de éxito.
+                    // Lógica para eliminar el historial
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935))
@@ -130,5 +126,5 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
 @Preview(showBackground = true)
 @Composable
 fun HistorialUIPreview() {
-    HistoryScreen(navController = rememberNavController()) // Para el Preview
+    HistoryScreen(navController = rememberNavController())
 }
