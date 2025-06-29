@@ -7,7 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,24 +27,26 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
     val username = viewModel.username
     val password = viewModel.password
     val isLoading = viewModel.isLoading
-    val loginSuccess = viewModel.loginSuccess
+
+    val backgroundColor = MaterialTheme.colorScheme.background
+    val cardColor = MaterialTheme.colorScheme.surface
+    val textColor = MaterialTheme.colorScheme.onBackground
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(horizontal = 24.dp)
+            .background(backgroundColor)
+            .systemBarsPadding()
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp),
+                    .padding(top = 24.dp, start = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButton(
@@ -53,19 +55,23 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Volver"
+                        contentDescription = "Volver",
+                        tint = textColor
                     )
                 }
             }
 
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "INICIAR SESIÓN",
                     fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = textColor
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -74,7 +80,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     border = CardDefaults.outlinedCardBorder(),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                    colors = CardDefaults.cardColors(containerColor = cardColor)
                 ) {
                     Column(
                         modifier = Modifier
@@ -111,7 +117,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                                         }
                                     },
                                     onError = {
-                                        // Podrías mostrar un Snackbar aquí
+                                        // Mostrar mensaje de error si se desea
                                     }
                                 )
                             },
@@ -156,4 +162,3 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
 fun LoginScreenPreview() {
     LoginScreen(navController = rememberNavController())
 }
-

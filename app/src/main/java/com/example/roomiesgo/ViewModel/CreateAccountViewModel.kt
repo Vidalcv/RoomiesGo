@@ -2,21 +2,18 @@ package com.example.roomiesgo.ViewModel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class CreateAccountViewModel : ViewModel() {
 
     private val _name = MutableStateFlow("")
-    val name = _name.asStateFlow()
+    val name: StateFlow<String> = _name
 
     private val _email = MutableStateFlow("")
-    val email = _email.asStateFlow()
+    val email: StateFlow<String> = _email
 
     private val _password = MutableStateFlow("")
-    val password = _password.asStateFlow()
-
-    private val _accountCreated = MutableStateFlow(false)
-    val accountCreated = _accountCreated.asStateFlow()
+    val password: StateFlow<String> = _password
 
     fun onNameChange(newName: String) {
         _name.value = newName
@@ -30,14 +27,10 @@ class CreateAccountViewModel : ViewModel() {
         _password.value = newPassword
     }
 
-    fun createAccount() {
-        // Aquí va tu lógica de validación o llamada a base de datos
-        if (_name.value.isNotBlank() && _email.value.isNotBlank() && _password.value.isNotBlank()) {
-            _accountCreated.value = true
+    fun createAccount(onSuccess: () -> Unit) {
+        // Aquí iría la lógica de creación real (API, validaciones, etc.)
+        if (_name.value.isNotBlank() && _email.value.contains("@") && _password.value.length >= 6) {
+            onSuccess()
         }
-    }
-
-    fun resetAccountCreatedFlag() {
-        _accountCreated.value = false
     }
 }
