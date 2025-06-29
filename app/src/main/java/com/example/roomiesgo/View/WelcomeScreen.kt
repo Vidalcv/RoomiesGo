@@ -43,7 +43,7 @@ fun WelcomeScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.logop),
+            painter = painterResource(R.drawable.logorg),
             contentDescription = "Logo",
             modifier = Modifier.size(255.dp)
         )

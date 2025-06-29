@@ -21,18 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import androidx.navigation.NavController // Importa NavController
-import androidx.navigation.compose.rememberNavController // Necesario para el Preview
 import com.example.roomiesgo.R
+import com.example.roomiesgo.ui.theme.Welcome
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.isSystemInDarkTheme
 
 @Composable
-fun AnimatedSplashScreen(navController: NavController) { // <-- Ahora recibe NavController
+fun AnimatedSplashScreen(navController: NavController) {
 
-    // Animación de escala y opacidad
     val scale by animateFloatAsState(
         targetValue = 1f,
         animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
@@ -44,52 +44,51 @@ fun AnimatedSplashScreen(navController: NavController) { // <-- Ahora recibe Nav
         label = "alpha"
     )
 
-    // Navegar luego de 3.5 segundos
     LaunchedEffect(Unit) {
         delay(1500)
-        // Navega a la WelcomeScreen y elimina el splash de la pila
         navController.navigate("welcome_screen") {
-            popUpTo("animated_splash_screen") { inclusive = true } // Elimina el splash de la pila
+            popUpTo("animated_splash_screen") { inclusive = true }
         }
     }
 
-    // Fondo degradado
+    // Detectar tema oscuro o claro
+    val isDarkTheme = isSystemInDarkTheme()
+    val textColor = if (isDarkTheme) Color.White.copy(alpha = alpha) else Color.Black.copy(alpha = alpha)
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(if (isDarkTheme) Color.Black else Color.White), // Fondo que cambia con el tema
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Logo con animación
             Image(
-                painter = painterResource(id = R.drawable.logop),
+                painter = painterResource(id = R.drawable.logot),
                 contentDescription = "Logo",
                 modifier = Modifier
-                    .size(140.dp)
+                    .size(200.dp)
                     .graphicsLayer {
                         scaleX = scale
                         scaleY = scale
                     }
             )
-
-            Spacer(modifier = Modifier.height(35.dp))
-
-            // Mensaje con fade
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "¡Bienvenido a RoomiesGo!",
+                text = Welcome,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Black.copy(alpha = alpha)
+                color = textColor
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            CircularProgressIndicator(
+                modifier = Modifier.size(35.dp),
+                color = textColor,
+                strokeWidth = 3.dp
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AnimatedSplashScreenPreview() {
-    AnimatedSplashScreen(navController = rememberNavController()) // Para el Preview
 }

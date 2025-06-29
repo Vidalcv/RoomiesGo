@@ -1,26 +1,28 @@
 package com.example.roomiesgo.View
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController // Importa NavController
-import androidx.navigation.compose.rememberNavController // Necesario para el Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.roomiesgo.R
 
 @Composable
-fun HistoryScreen(navController: NavController) { // <-- Añade NavController
+fun HistoryScreen(navController: NavController) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,39 +33,30 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Header con icono, logo y título centrado
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(56.dp)
             ) {
-                // Icono volver a la izquierda
                 IconButton(
-                    onClick = { navController.popBackStack() }, // Vuelve a la pantalla anterior (HomeScreen)
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.align(Alignment.CenterStart)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flecha_izquierda), // Asegúrate de tener este recurso
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Volver",
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier.size(32.dp),
+                        tint = Color.Black
                     )
                 }
-                // Spacer(modifier = Modifier.width(48.dp)) // Este Spacer puede causar problemas de alineación con el Box, lo comento.
 
-                // Row con logo a la izquierda y título centrado (ajustado para funcionar con IconButton)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center // Centra el contenido de este Row
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    // Puedes ajustar el tamaño del logo si es necesario para el centrado visual
-                    Image(
-                        painter = painterResource(id = R.drawable.logop),
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(65.dp)
-                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "HISTORIAL",
@@ -73,11 +66,7 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
                 }
             }
 
-            Divider(
-                color = Color.Gray,
-                thickness = 1.dp,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Divider(color = Color.Gray, thickness = 1.dp)
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -100,8 +89,7 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         Text("Tarea", fontWeight = FontWeight.Bold)
                         Text("Lucía")
@@ -113,17 +101,35 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {
-                    // Aquí iría la lógica para eliminar el historial.
-                    // Podrías mostrar un Diálogo de confirmación antes de eliminar.
-                    // Después de la acción, no hay navegación automática, se queda en la misma pantalla.
-                    // Opcional: mostrar un Toast/Snackbar de éxito.
-                },
+                onClick = { showDialog = true },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935))
             ) {
                 Text("Eliminar historial")
             }
+        }
+
+        // Diálogo de confirmación
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("¿Estás segura?") },
+                text = { Text("Esta acción eliminará el historial de manera permanente.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showDialog = false
+                        // Aquí va la lógica real de eliminación
+                        println("Historial eliminado")
+                    }) {
+                        Text("Confirmar")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
         }
     }
 }
@@ -131,5 +137,5 @@ fun HistoryScreen(navController: NavController) { // <-- Añade NavController
 @Preview(showBackground = true)
 @Composable
 fun HistorialUIPreview() {
-    HistoryScreen(navController = rememberNavController()) // Para el Preview
+    HistoryScreen(navController = rememberNavController())
 }
