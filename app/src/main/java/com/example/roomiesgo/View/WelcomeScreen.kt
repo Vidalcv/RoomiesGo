@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +24,6 @@ fun WelcomeScreen(navController: NavController) {
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val buttonColor = Color(0xFF159E91)  // Tu color personalizado para botones
-
-    // El color del texto del botón se adapta para buen contraste dependiendo del fondo
     val buttonTextColor = MaterialTheme.colorScheme.onPrimary
 
     Box(
@@ -38,7 +35,8 @@ fun WelcomeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
+                //. Aquí quitamos el padding horizontal para eliminar bordes laterales
+                .padding(vertical = 24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -61,7 +59,7 @@ fun WelcomeScreen(navController: NavController) {
             ) {
                 Text(
                     text = "Iniciar Sesión",
-                    color = buttonTextColor,  // Texto que se adapta al tema
+                    color = buttonTextColor,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
