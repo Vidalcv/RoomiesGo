@@ -21,9 +21,8 @@ import com.example.roomiesgo.R
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
-
     val backgroundColor = MaterialTheme.colorScheme.background
-    val buttonColor = Color(0xFF159E91)  // Tu color personalizado para botones
+    val buttonColor = Color(0xFF159E91)
     val buttonTextColor = MaterialTheme.colorScheme.onPrimary
 
     Box(
@@ -35,8 +34,7 @@ fun WelcomeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                //. Aquí quitamos el padding horizontal para eliminar bordes laterales
-                .padding(vertical = 24.dp),
+                .padding(vertical = 24.dp, horizontal = 24.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -68,6 +66,38 @@ fun WelcomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedButton(
+                onClick = {
+                    navController.navigate("google_login_screen")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(1.dp, Color.Gray),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                )
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_google_logo),
+                        contentDescription = "Google Icon",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .padding(end = 8.dp)
+                    )
+                    Text(
+                        text = "Continuar con Google",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedButton(
                 onClick = { navController.navigate("create_account_screen") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,8 +118,3 @@ fun WelcomeScreen(navController: NavController) {
     }
 }
 
-@Composable
-@Preview(showBackground = true)
-fun WelcomeScreenPreview() {
-    WelcomeScreen(navController = rememberNavController())
-}

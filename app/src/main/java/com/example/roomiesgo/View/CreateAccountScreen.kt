@@ -30,6 +30,7 @@ fun CreateAccountScreen(
     val password by viewModel.password.collectAsState()
 
     var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val cardColor = MaterialTheme.colorScheme.surface
@@ -119,17 +120,31 @@ fun CreateAccountScreen(
                             visualTransformation = PasswordVisualTransformation()
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        errorMessage?.let {
+                            Text(
+                                text = it,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
 
                         Button(
                             onClick = {
                                 isLoading = true
+                                errorMessage = null
                                 viewModel.createAccount(
                                     onSuccess = {
                                         isLoading = false
                                         navController.navigate("login_screen") {
                                             popUpTo("welcome_screen") { inclusive = true }
                                         }
+                                    },
+                                    onError = { error ->
+                                        isLoading = false
+                                        errorMessage = error
                                     }
                                 )
                             },

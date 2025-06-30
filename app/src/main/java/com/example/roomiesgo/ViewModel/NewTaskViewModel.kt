@@ -6,6 +6,11 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class NewTaskViewModel : ViewModel() {
@@ -13,6 +18,9 @@ class NewTaskViewModel : ViewModel() {
     val description = mutableStateOf("")
     val date = mutableStateOf("")
     val time = mutableStateOf("")
+
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     fun showDatePicker(context: Context) {
         val calendar = Calendar.getInstance()
@@ -45,14 +53,41 @@ class NewTaskViewModel : ViewModel() {
     }
 
     fun saveTask(context: Context): Boolean {
-        return if (title.value.isBlank() || description.value.isBlank() || date.value.isBlank() || time.value.isBlank()) {
+        if (title.value.isBlank() || description.value.isBlank() || date.value.isBlank() || time.value.isBlank()) {
             Toast.makeText(context, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
-            false
-        } else {
-            // Lógica para guardar la tarea
-            Toast.makeText(context, "Tarea guardada exitosamente", Toast.LENGTH_SHORT).show()
-            true
+            return false
         }
-    }
 
+        viewModelScope.launch {
+            val uid = auth.currentUser?.uid
+            if (uid == null) {
+                Toast.makeText(context, "Usuario no autenticado", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+
+            val task = hashMapOf(
+                "titulo" to title.value,
+                "descripcion" to description.value,
+                "fecha" to date.value,
+                "hora" to time.value,
+                "completada" to false,
+                "puntos" to 10,
+                "asignadaA" to uid
+            )
+
+            try {
+                db.collection("tareas").add(task).await()
+                Toast.makeText(context, "Tarea guardada exitosamente", Toast.LENGTH_SHORT).show()
+                // Limpia campos después de guardar (opcional)
+                title.value = ""
+                description.value = ""
+                date.value = ""
+                time.value = ""
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error al guardar la tarea: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        return true
+    }
 }

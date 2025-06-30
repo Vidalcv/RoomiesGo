@@ -1,9 +1,10 @@
 package com.example.roomiesgo.model
 
-data class Tarea (
+data class Tarea(
     val id: String = "",
     val titulo: String = "",
-    val hora: String = "",
+    val fecha: String = "",
     val puntos: Int = 0,
-    val hecha: Boolean = false
+    val completada: Boolean = false,
+    val asignadaA: String = ""
 )

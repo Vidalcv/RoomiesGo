@@ -7,10 +7,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.roomiesgo.ViewModel.LoginViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewModel()) {
@@ -27,6 +29,18 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
     val username = viewModel.username
     val password = viewModel.password
     val isLoading = viewModel.isLoading
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val auth = FirebaseAuth.getInstance()
+
+//    LaunchedEffect(Unit) {
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
+//            navController.navigate("home_screen") {
+//                popUpTo("login_screen") { inclusive = true }
+//            }
+//        }
+//    }
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val cardColor = MaterialTheme.colorScheme.surface
@@ -90,7 +104,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                         OutlinedTextField(
                             value = username,
                             onValueChange = viewModel::onUsernameChanged,
-                            label = { Text("Usuario") },
+                            label = { Text("Correo Electrónico") },
                             modifier = Modifier.fillMaxWidth(),
                             singleLine = true
                         )
@@ -106,10 +120,20 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                             visualTransformation = PasswordVisualTransformation()
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        errorMessage?.let {
+                            Text(
+                                text = it,
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
 
                         Button(
                             onClick = {
+                                errorMessage = null
                                 viewModel.login(
                                     onSuccess = {
                                         navController.navigate("home_screen") {
@@ -117,7 +141,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
                                         }
                                     },
                                     onError = {
-                                        // Mostrar mensaje de error si se desea
+                                        errorMessage = it
                                     }
                                 )
                             },

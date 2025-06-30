@@ -3,10 +3,13 @@ package com.example.roomiesgo.ViewModel
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class LoginViewModel : ViewModel() {
+
+    private val auth = FirebaseAuth.getInstance()
 
     var username by mutableStateOf("")
         private set
@@ -28,21 +31,22 @@ class LoginViewModel : ViewModel() {
         password = newPassword
     }
 
-    fun login(onSuccess: () -> Unit, onError: () -> Unit) {
+    fun login(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit // <-- ACEPTA EL MENSAJE DE ERROR
+    ) {
         isLoading = true
         viewModelScope.launch {
-            delay(1000) // Simula tiempo de respuesta de red o BD
-
-            // Lógica básica de autenticación
-            if (username == "admin" && password == "1234") {
+            try {
+                auth.signInWithEmailAndPassword(username, password).await()
                 loginSuccess = true
                 onSuccess()
-            } else {
+            } catch (e: Exception) {
                 loginSuccess = false
-                onError()
+                onError(e.message ?: "Error desconocido al iniciar sesión")
+            } finally {
+                isLoading = false
             }
-
-            isLoading = false
         }
     }
 }

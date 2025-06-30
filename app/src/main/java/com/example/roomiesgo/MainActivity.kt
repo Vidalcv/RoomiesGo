@@ -26,6 +26,7 @@ import com.example.roomiesgo.View.HomeScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.NewTaskScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.TaskScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.AnimatedSplashScreen
+import com.example.roomiesgo.View.GoogleLoginScreen
 import com.example.roomiesgo.View.PasswordScreen
 import com.example.roomiesgo.ui.theme.RoomiesGoTheme // Asegúrate de tener tu tema importado
 
@@ -109,6 +110,18 @@ fun AppNavigation() {
             ) {
                 // Aquí usamos el Composable CreateAccountScreen que ya modificamos
                 CreateAccountScreen(navController = navController)
+            }
+        }
+        composable("google_login_screen") {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                // Aquí usamos el Composable CreateAccountScreen que ya modificamos
+                GoogleLoginScreen(navController = navController)
             }
         }
 

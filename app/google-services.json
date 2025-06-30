@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "654268518038",
+    "project_id": "roomiesgo-96b73",
+    "storage_bucket": "roomiesgo-96b73.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654268518038:android:7716c1048e879ee4c27cb7",
+        "android_client_info": {
+          "package_name": "com.example.roomiesgo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654268518038-877aq7adda5mt7rb4p1qmd157oglfo1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roomiesgo",
+            "certificate_hash": "bc52acc4f6ae36dcaa90dfadd3d24f9c0b67ecc8"
+          }
+        },
+        {
+          "client_id": "654268518038-acjsqp7i47naphta9hubv86pmka9oqb5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmGzxoKxUXcxRbV2DWxyeG8si66NuQa58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654268518038-3shs64h8kj8t3qgoipp1t8vqhk6i5771.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
