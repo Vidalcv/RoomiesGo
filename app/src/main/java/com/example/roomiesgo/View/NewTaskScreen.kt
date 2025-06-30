@@ -4,7 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,89 +25,84 @@ fun NewTaskScreen(
 ) {
     val context = LocalContext.current
 
-    Column(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Color.White)
-            .padding(horizontal = 24.dp, vertical = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        contentAlignment = Alignment.Center
     ) {
-        IconButton(
-            onClick = { navController.popBackStack() },
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.Start)
+                .widthIn(max = 340.dp)
+                .padding(horizontal = 24.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Volver",
-                modifier = Modifier.size(32.dp)
+            Text(
+                text = "Nueva tarea",
+                fontSize = 26.sp,
+                color = MaterialTheme.colorScheme.onBackground
             )
-        }
 
-        Text(
-            text = "Nueva tarea",
-            fontSize = 26.sp,
-            color = Color.Black,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
+            OutlinedTextField(
+                value = viewModel.title.value,
+                onValueChange = { viewModel.title.value = it },
+                label = { Text("Título") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        OutlinedTextField(
-            value = viewModel.title.value,
-            onValueChange = viewModel::onTitleChange,
-            label = { Text("Título") },
-            modifier = Modifier.fillMaxWidth()
-        )
+            OutlinedTextField(
+                value = viewModel.description.value,
+                onValueChange = { viewModel.description.value = it },
+                label = { Text("Descripción") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        OutlinedTextField(
-            value = viewModel.description.value,
-            onValueChange = viewModel::onDescriptionChange,
-            label = { Text("Descripción") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Fecha
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { viewModel.showDatePicker(context) }
-        ) {
             OutlinedTextField(
                 value = viewModel.date.value,
-                onValueChange = {},
+                onValueChange = { viewModel.date.value = it },
                 label = { Text("Fecha límite") },
-                readOnly = true,
-                modifier = Modifier.fillMaxWidth()
+                placeholder = { Text("DD/MM/YYYY") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.showDatePicker(context) },
+                singleLine = true,
+                trailingIcon = {
+                    IconButton(onClick = { viewModel.showDatePicker(context) }) {
+                        Icon(Icons.Default.DateRange, contentDescription = "Seleccionar fecha")
+                    }
+                }
             )
-        }
 
-        // Hora
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { viewModel.showTimePicker(context) }
-        ) {
             OutlinedTextField(
                 value = viewModel.time.value,
-                onValueChange = {},
+                onValueChange = { viewModel.time.value = it },
                 label = { Text("Hora") },
-                readOnly = true,
-                modifier = Modifier.fillMaxWidth()
+                placeholder = { Text("HH:MM") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { viewModel.showTimePicker(context) },
+                singleLine = true,
+                trailingIcon = {
+                    IconButton(onClick = { viewModel.showTimePicker(context) }) {
+                        Icon(Icons.Default.Schedule, contentDescription = "Seleccionar hora")
+                    }
+                }
             )
-        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        Button(
-            onClick = {
-                viewModel.saveTask()
-                navController.popBackStack()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688))
-        ) {
-            Text("Guardar")
+            Button(
+                onClick = {
+                    if (viewModel.saveTask(context)) {
+                        navController.popBackStack()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text("Guardar")
+            }
         }
     }
 }

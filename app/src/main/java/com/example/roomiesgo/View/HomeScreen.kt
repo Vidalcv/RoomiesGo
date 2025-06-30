@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
+
 @Composable
 fun HomeScreen(navController: NavController) {
     var menuExpanded by remember { mutableStateOf(false) }
@@ -29,7 +30,7 @@ fun HomeScreen(navController: NavController) {
         contentWindowInsets = WindowInsets.safeDrawing,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate("task_screen") },
+                onClick = { navController.navigate("new_task_screen") },
                 containerColor = Color(0xFF159E91)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar tarea")
@@ -64,7 +65,7 @@ fun HomeScreen(navController: NavController) {
                             text = { Text("Historial") },
                             onClick = {
                                 menuExpanded = false
-                                navController.navigate("history_screen")
+                                navController.navigate("task_screen")
                             }
                         )
                         DropdownMenuItem(

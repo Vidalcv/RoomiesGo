@@ -26,7 +26,6 @@ import com.example.roomiesgo.View.HomeScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.NewTaskScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.TaskScreen // Necesitas crear este Composable
 import com.example.roomiesgo.View.AnimatedSplashScreen
-import com.example.roomiesgo.View.HistoryScreen
 import com.example.roomiesgo.View.PasswordScreen
 import com.example.roomiesgo.ui.theme.RoomiesGoTheme // Asegúrate de tener tu tema importado
 
@@ -146,17 +145,6 @@ fun AppNavigation() {
                 verticalArrangement = Arrangement.Center
             ) {
                 TaskScreen(navController = navController)
-            }
-        }
-        composable("history_screen") {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                HistoryScreen(navController = navController)
             }
         }
     }
